@@ -19,35 +19,35 @@
 %% Initialization
 
 % Taking coefficients vector and organizing the first two rows
-ceoffLength = length(coeffVector);
-rhTableColumn = round(ceoffLength/2);
+coeffLength = length(coeffVector);
+rhTableColumn = round(coeffLength/2);
 
 %  Initialize Routh-Hurwitz table with empty zero array
-rhTable = zeros(ceoffLength,rhTableColumn);
+rhTable = zeros(coeffLength,rhTableColumn);
 
 %  Compute first row of the table
-rhTable(1,:) = coeffVector(1,1:2:ceoffLength);
+rhTable(1,:) = coeffVector(1,1:2:coeffLength);
 
 %  Check if length of coefficients vector is even or odd
-if (rem(ceoffLength,2) ~= 0)
+if (rem(coeffLength,2) ~= 0)
     % if odd, second row of table will be
-    rhTable(2,1:rhTableColumn - 1) = coeffVector(1,2:2:ceoffLength);
+    rhTable(2,1:rhTableColumn - 1) = coeffVector(1,2:2:coeffLength);
 else
     % if even, second row of table will be
-    rhTable(2,:) = coeffVector(1,2:2:ceoffLength);
+    rhTable(2,:) = coeffVector(1,2:2:coeffLength);
 end
 
 %% Calculate Routh-Hurwitz table's rows
 
 %  Set epss as a small value
-epss = 0.01;
+epss = 0.001;
 
 %  Calculate other elements of the table
-for i = 3:ceoffLength
+for i = 3:coeffLength
    
     %  special case: row of all zeros
     if rhTable(i-1,:) == 0
-        order = (ceoffLength - i);
+        order = (coeffLength - i);
         cnt1 = 0;
         cnt2 = 1;
         for j = 1:rhTableColumn - 1
@@ -78,7 +78,7 @@ end
 unstablePoles = 0;
 
 %   Check change in signs
-for i = 1:ceoffLength - 1
+for i = 1:coeffLength - 1
     if sign(rhTable(i,1)) * sign(rhTable(i+1,1)) == -1
         unstablePoles = unstablePoles + 1;
     end
